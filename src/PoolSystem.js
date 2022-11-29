@@ -1,5 +1,3 @@
-const { Vector } = require("../../../../../../.vscode/extensions/samplavigne.p5-vscode-1.2.12/p5types");
-
 /**
  * PoolSystem class
  *
