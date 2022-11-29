@@ -9,8 +9,13 @@ class Ball {
 
   position = null;
 
-  constructor(posX, posY, color = null) {
-    this.position = createVector(posX, posY);
+  /**
+   * 
+   * @param {Vector} pos position vector
+   * @param {Colors} color ball color
+   */
+  constructor(pos, color = null) {
+    this.position = pos;
     this.color = color ? color : Colors.WHITE; // Defaults to white ball.
   }
 
