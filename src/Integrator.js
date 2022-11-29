@@ -14,8 +14,8 @@ class Integrator {
    * @returns {ParticleState} new state
    */
   static Integrate(system, currentState, start_time, dt) {
-    // TODO: first implement Euler for testing
-    // TODO: later implement Rk4
-    throw new Error("Not Implemented.");
+    // TODO: later implement Rk4 instead of Euler.
+    const deriv = system.computeTimeDerivative(currentState, start_time);
+    return deriv.multiply(dt).add(currentState);
   }
 }

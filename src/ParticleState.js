@@ -7,6 +7,11 @@ class ParticleState {
   positions = [];
   velocities = [];
 
+  /**
+   *
+   * @param {Vector[]} positionsArr array of positions as vectors
+   * @param {Vector[]} velocitiesArr array of velocities
+   */
   constructor(positionsArr, velocitiesArr) {
     if (positionsArr.length != velocitiesArr.length) {
       throw new Error("Position and velocity arrays must have same length.");
@@ -21,10 +26,12 @@ class ParticleState {
    * @returns {ParticleState} resulting state
    */
   add(otherState) {
-    if (this.positions.length !== otherState.positions.length
-     || this.velocities.length !== otherState.velocities.length) {
-       throw new Error("Particle states must be same size!");
-     }
+    if (
+      this.positions.length !== otherState.positions.length ||
+      this.velocities.length !== otherState.velocities.length
+    ) {
+      throw new Error("Particle states must be same size!");
+    }
     for (idx = 0; idx < this.positions.length; idx++) {
       this.positions[idx] += otherState.positions[idx];
       this.velocities[idx] += otherState.velocities[idx];

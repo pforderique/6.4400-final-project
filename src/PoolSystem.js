@@ -1,3 +1,5 @@
+const { Vector } = require("../../../../../../.vscode/extensions/samplavigne.p5-vscode-1.2.12/p5types");
+
 /**
  * PoolSystem class
  *
@@ -9,11 +11,18 @@ class PoolSystem {
    * Does not take into account collisions - just finds next state given forces.
    *
    * @param {ParticleState} state current state vector
-   * @param {float} deltaTime time elapsed
+   * @param {float} time time elapsed
    * @returns {ParticleState} new state vector after time derivative
    */
-  ComputeTimeDerivative(state, time) {
-    // TODO
-    throw new Error("Not Implemented.");
+  computeTimeDerivative(state, time) {
+    // TODO: Change this to actually take into to account forces.
+    const newPositions = [];
+    const newVelocities = [];
+
+    for (const pos of state.positions) {
+      newPositions.push(createVector(-pos.y, pos.x));
+      newVelocities.push(0); // garbage for simple system
+    }
+    return new ParticleState(newPositions, newVelocities);
   }
 }
