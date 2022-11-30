@@ -33,8 +33,8 @@ class ParticleState {
       throw new Error("Particle states must be same size!");
     }
     for (let idx = 0; idx < this.positions.length; idx++) {
-      this.positions[idx] += otherState.positions[idx];
-      this.velocities[idx] += otherState.velocities[idx];
+      this.positions[idx].add(otherState.positions[idx]);
+      this.velocities[idx].add(otherState.velocities[idx]);
     }
     return this;
   }
@@ -44,10 +44,11 @@ class ParticleState {
    * @param {float} constant the multiplication factor.
    * @returns {ParticleState} resulting state
    */
-  multiply(constant) {
+  multiply(k) {
     for (let idx = 0; idx < this.positions.length; idx++) {
-      this.positions[idx] *= constant;
-      this.velocities[idx] *= constant;
+      this.positions[idx].mult(k);
+      this.velocities[idx].mult(k);
+      createVector
     }
     return this;
   }
@@ -62,5 +63,12 @@ class ParticleState {
       this.positions.map((pos) => pos.copy()),
       this.velocities.map((vel) => vel.copy())
     );
+  }
+
+  toString() {
+    return [
+      'Particle State',
+      'positions: ' + this.positions.toString(),
+      'velocities: ' + this.velocities.toString()].join('\n');
   }
 }

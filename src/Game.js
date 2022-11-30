@@ -34,7 +34,6 @@ class Game {
 
     // Hardcoded settings.
     this.poolSystem = new PoolSystem();
-    this.integrator = new Integrator();
 
     // Create a ball for every ball color we get.
     for (let idx = 0; idx < this.ballColors.length; idx++) {
@@ -43,8 +42,6 @@ class Game {
 
       this.balls.push(new Ball(pos, color));
     }
-    print(this.balls);
-    this.balls[0].show();
   }
 
   /**
@@ -53,24 +50,16 @@ class Game {
    */
   update(deltaTime) {
     // TODO: find next position of all balls and then handle collisions for each
-    // int num_integrations = (int) (delta_time / step_size_);
-    // if (num_integrations == 0) num_integrations = 1; // want to update at least once, imo
+
+    // Integrate each particle in the current state.
+    let new_state = Integrator.integrate(
+      this.poolSystem, this.currentState, this.stepSize);
+
+    for (let idx = 0; idx < new_state.positions.length; idx++) {
+      this.balls[idx].position = new_state.positions[idx];
+    }
+    this.currentState = new_state;
   
-    // ParticleState new_state;
-    // for (int count = 0; count < num_integrations; count++) {
-    //   // Integrate each particle in the current_state_
-    //   new_state = integrator_->Integrate(
-    //     *system_, current_state_, current_time_, step_size_);
-  
-    //   for (int idx = 0; idx < new_state.positions.size(); idx++) {
-    //     particle_node_ptrs_[idx]->GetTransform()
-    //       .SetPosition(new_state.positions[idx]);
-    //   }
-    //   current_state_ = new_state;
-    // }
-  
-    // current_time_ += (float) delta_time; // necessary? YES. (just not for simple.)
-    throw new Error("Not Implemented.");
   }
 
   render() {

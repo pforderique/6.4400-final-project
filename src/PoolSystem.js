@@ -9,17 +9,16 @@ class PoolSystem {
    * Does not take into account collisions - just finds next state given forces.
    *
    * @param {ParticleState} state current state vector
-   * @param {float} time time elapsed
    * @returns {ParticleState} new state vector after time derivative
    */
-  computeTimeDerivative(state, time) {
+  computeTimeDerivative(state) {
     // TODO: Change this to actually take into to account forces.
     const newPositions = [];
     const newVelocities = [];
 
     for (const pos of state.positions) {
       newPositions.push(createVector(-pos.y, pos.x));
-      newVelocities.push(0); // garbage for simple system
+      newVelocities.push(createVector(0, 0)); // garbage for simple system
     }
     return new ParticleState(newPositions, newVelocities);
   }
