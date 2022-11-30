@@ -33,7 +33,7 @@ class Game {
     this.stepSize = stepsize;
 
     // Hardcoded settings.
-    this.poolSystem = new PoolSystem();
+    this.poolSystem = new PoolSystem(this.ballColors.length);
 
     // Create a ball for every ball color we get.
     for (let idx = 0; idx < this.ballColors.length; idx++) {
@@ -54,7 +54,6 @@ class Game {
     // Integrate each particle in the current state.
     let new_state = Integrator.integrate(
       this.poolSystem, this.currentState, this.stepSize);
-
     for (let idx = 0; idx < new_state.positions.length; idx++) {
       this.balls[idx].position = new_state.positions[idx];
     }

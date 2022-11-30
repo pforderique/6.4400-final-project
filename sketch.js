@@ -10,12 +10,14 @@ function setup() {
   last_tick_time = millis();
 
   let initialState = new ParticleState(
-    [createVector(50, 50)],
-    [createVector(0, 0)]
+    [createVector(50, TABLE_HEIGHT - 100), createVector(50, 300)],
+    [createVector(0, 0), createVector(0, 0)]
   );
-  let ballColors = [Colors.WHITE];
-  let stepSize = 0.03;
+  let ballColors = [Colors.WHITE, Colors.BLUE];
+  let stepSize = 0.25;
   game = new Game(initialState, ballColors, stepSize);
+
+  game.poolSystem.applyForce(0, createVector(0, -64));
 }
 
 function draw() {
@@ -23,11 +25,8 @@ function draw() {
   let current_tick_time = millis();
   let delta_time = current_tick_time - last_tick_time;
 
-  push();
-  translate(width/2, height/2);
   game.update(delta_time);
   game.render();
-  pop();
 
   last_tick_time = current_tick_time;
 }
