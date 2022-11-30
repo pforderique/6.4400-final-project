@@ -15,12 +15,15 @@ class Game {
 
   /**
    *
-   * @param {ParticleState} state initial state of all game balls.
+   * @param {ParticleState} initState initial state of all game balls.
    * @param {Colors[]}} ballcolors array of colors to paint the game balls.
    * @param {float} stepsize step size to use when integrating.
    */
-  constructor(state, ballcolors, stepsize) {
-    if (state.positions.length != ballcolors.length) this.currentState = state;
+  constructor(initState, ballcolors, stepsize) {
+    if (initState.positions.length != ballcolors.length) {
+      throw new Error("Ball color array size must match state vector sizes.");
+    }
+    this.currentState = initState;
     this.stepSize = stepsize;
   }
 

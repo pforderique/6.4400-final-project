@@ -16,8 +16,8 @@ class ParticleState {
     if (positionsArr.length != velocitiesArr.length) {
       throw new Error("Position and velocity arrays must have same length.");
     }
-    this.positions = positionsArr.copy();
-    this.velocities = velocitiesArr.copy();
+    this.positions = positionsArr;
+    this.velocities = velocitiesArr;
   }
 
   /**
@@ -50,5 +50,17 @@ class ParticleState {
       this.velocities[idx] *= constant;
     }
     return this;
+  }
+
+  /**
+   * Returns a copy of the particle state.
+   * @returns {ParticleState} new state.
+   */
+  copy() {
+    // Create copies of the vectors in these arrays.
+    return new ParticleState(
+      this.positions.map((pos) => pos.copy()),
+      this.velocities.map((vel) => vel.copy())
+    );
   }
 }
