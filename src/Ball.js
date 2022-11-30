@@ -4,15 +4,15 @@
  * Holds internal position of the ball
  */
 class Ball {
-  static RADIUS = 10;
+  static RADIUS = 40;
   static MASS = 1;
 
   position = null;
 
   /**
-   * 
+   *
    * @param {Vector} pos position vector
-   * @param {Colors} color ball color
+   * @param {Color} color ball color
    */
   constructor(pos, color = null) {
     this.position = pos;
@@ -24,6 +24,6 @@ class Ball {
    */
   show() {
     fill(this.color);
-    ellipse(this.position.x, this.position.y, RADIUS);
+    ellipse(this.position.x, this.position.y, Ball.RADIUS);
   }
 }

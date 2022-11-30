@@ -33,10 +33,18 @@ class Game {
     this.stepSize = stepsize;
 
     // Hardcoded settings.
-    this.poolSystem = PoolSystem();
-    this.integrator = Integrator();
+    this.poolSystem = new PoolSystem();
+    this.integrator = new Integrator();
 
     // Create a ball for every ball color we get.
+    for (let idx = 0; idx < this.ballColors.length; idx++) {
+      const pos = this.initialState.positions[idx];
+      const color = this.ballColors[idx];
+
+      this.balls.push(new Ball(pos, color));
+    }
+    print(this.balls);
+    this.balls[0].show();
   }
 
   /**
@@ -63,5 +71,9 @@ class Game {
   
     // current_time_ += (float) delta_time; // necessary? YES. (just not for simple.)
     throw new Error("Not Implemented.");
+  }
+
+  render() {
+    this.balls.forEach(ball => ball.show());
   }
 }
