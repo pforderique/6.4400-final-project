@@ -32,7 +32,7 @@ class ParticleState {
     ) {
       throw new Error("Particle states must be same size!");
     }
-    for (idx = 0; idx < this.positions.length; idx++) {
+    for (let idx = 0; idx < this.positions.length; idx++) {
       this.positions[idx] += otherState.positions[idx];
       this.velocities[idx] += otherState.velocities[idx];
     }
@@ -45,7 +45,7 @@ class ParticleState {
    * @returns {ParticleState} resulting state
    */
   multiply(constant) {
-    for (idx = 0; idx < this.positions.length; idx++) {
+    for (let idx = 0; idx < this.positions.length; idx++) {
       this.positions[idx] *= constant;
       this.velocities[idx] *= constant;
     }

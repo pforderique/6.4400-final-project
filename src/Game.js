@@ -9,9 +9,13 @@ class Game {
   // game variables
   initialState = null;
   currentState = null;
+  ballColors = null;
+  stepSize = null;
+
+  balls = [];
+  currentTime = 0;
   integrator = null;
   poolSystem = null;
-  stepSize = null;
 
   /**
    *
@@ -23,8 +27,16 @@ class Game {
     if (initState.positions.length != ballcolors.length) {
       throw new Error("Ball color array size must match state vector sizes.");
     }
-    this.currentState = initState;
+    this.initialState = initState.copy();
+    this.currentState = initState.copy();
+    this.ballColors = ballcolors;
     this.stepSize = stepsize;
+
+    // Hardcoded settings.
+    this.poolSystem = PoolSystem();
+    this.integrator = Integrator();
+
+    // Create a ball for every ball color we get.
   }
 
   /**
@@ -33,6 +45,23 @@ class Game {
    */
   update(deltaTime) {
     // TODO: find next position of all balls and then handle collisions for each
+    // int num_integrations = (int) (delta_time / step_size_);
+    // if (num_integrations == 0) num_integrations = 1; // want to update at least once, imo
+  
+    // ParticleState new_state;
+    // for (int count = 0; count < num_integrations; count++) {
+    //   // Integrate each particle in the current_state_
+    //   new_state = integrator_->Integrate(
+    //     *system_, current_state_, current_time_, step_size_);
+  
+    //   for (int idx = 0; idx < new_state.positions.size(); idx++) {
+    //     particle_node_ptrs_[idx]->GetTransform()
+    //       .SetPosition(new_state.positions[idx]);
+    //   }
+    //   current_state_ = new_state;
+    // }
+  
+    // current_time_ += (float) delta_time; // necessary? YES. (just not for simple.)
     throw new Error("Not Implemented.");
   }
 }
