@@ -86,7 +86,15 @@ class Game {
     }
 
     // TODO: handle ball on ball intersection.
-
+    for (let i = 0; i < this.balls.length; i++) {
+      const ball1 = this.balls[i];
+      for (let j = i + 1; j < this.balls.length; j++) {
+        const ball2 = this.balls[j];
+        if (ball1.intersectBall(ball2)) {
+          print('intersection!');
+        }
+      }
+    }
 
     for (let idx = 0; idx < new_state.positions.length; idx++) {
       this.balls[idx].position = new_state.positions[idx];

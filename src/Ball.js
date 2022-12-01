@@ -37,7 +37,13 @@ class Ball {
    * @returns {bool} true if intersection exists, else false
    */
   intersectBall(other) {
-    // TODO
+    const centersDist = dist(
+      this.position.x,
+      this.position.y,
+      other.position.x,
+      other.position.y
+    );
+    return centersDist < 2 * Ball.RADIUS;
   }
 
   /**
@@ -45,6 +51,6 @@ class Ball {
    */
   show() {
     fill(this.color);
-    ellipse(this.position.x, this.position.y, Ball.RADIUS*2);
+    ellipse(this.position.x, this.position.y, Ball.RADIUS * 2);
   }
 }
