@@ -4,6 +4,7 @@ const Colors = {
   BLUE: color(30, 50, 100),
   GREEN: color(50, 80, 30),
   RED: color(120, 50, 30),
+  // TODO: add more color constants for the other balls.
   WHITE: color(255),
   BLACK: color(0),
   WOOD: color(150, 111, 51),
