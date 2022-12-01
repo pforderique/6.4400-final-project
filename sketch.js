@@ -15,7 +15,7 @@ function setup() {
   let stepSize = 0.25;
   game = new Game(initialState, ballColors, stepSize);
 
-  game.poolSystem.applyForce(0, createVector(16, 64).mult(2));
+  // game.poolSystem.applyForce(0, createVector(16, 64).mult(2));
 }
 
 function draw() {
@@ -27,4 +27,13 @@ function draw() {
   game.render();
 
   last_tick_time = current_tick_time;
+
+  if (game.cueStick.canShow(game.currentState, mouseX, mouseY))
+    game.cueStick.showCueVector(game.currentState, mouseX, mouseY);
+}
+
+function mouseClicked(event) {
+  if (game.cueStick.canShow(game.currentState, mouseX, mouseY))
+    game.cueStick.shoot(game.currentState, mouseX, mouseY);
+  // print(mouseX, mouseY);
 }

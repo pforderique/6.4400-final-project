@@ -26,21 +26,27 @@ class PoolSystem {
     if (state.positions.length != this.appliedForces.length) {
       throw new Error("The given applied forces array is not the same size.");
     }
-    // TODO: Change this to actually take into to account forces.
     state = state.copy();
     const newPositions = state.velocities;
     const newVelocities = [];
 
     for (let idx = 0; idx < state.positions.length; idx++) {
+      // Calculate frictional force.
       const vel = state.velocities[idx];
       const frictionForce = vel
         .copy()
         .rotate(PI)
         .setMag(Table.mu * Ball.MASS * Physics.gravityMag);
       createVector().rotate()
+
+      // TODO: Calculate wind resistance force.
+      // ...
+
+      // Get the applied force on this ball by user (if any).
       const appliedForce = this.appliedForces[idx]; // Vector
       this.appliedForces[idx] = createVector(0, 0); // Reset once force is applied.
 
+      // Sum all forces to find final acceleration.
       const net_force = appliedForce.add(frictionForce); // .add(force1).add(force2)...
       const acceleration_i = net_force.mult(1.0 / Ball.MASS);
 

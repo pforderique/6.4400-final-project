@@ -13,27 +13,30 @@ class Game {
   stepSize = null;
 
   balls = [];
+  whiteBallIdx = 0;
   currentTime = 0;
   integrator = null;
   poolSystem = null;
+  cueStick = null;
 
   /**
    *
    * @param {ParticleState} initState initial state of all game balls.
-   * @param {Colors[]}} ballcolors array of colors to paint the game balls.
+   * @param {Colors[]} ballcolors array of colors to paint the game balls.
+   *  White ball MUST be the first color.
    * @param {float} stepsize step size to use when integrating.
    */
   constructor(initState, ballcolors, stepsize) {
-    if (initState.positions.length != ballcolors.length) {
+    if (initState.positions.length != ballcolors.length)
       throw new Error("Ball color array size must match state vector sizes.");
-    }
+      
+    if (!ballcolors.length || ballcolors[0] !== Colors.WHITE)
+      throw new Error("White ball MUST be the first color in `ballColors`.");
+    
     this.initialState = initState.copy();
     this.currentState = initState.copy();
     this.ballColors = ballcolors;
     this.stepSize = stepsize;
-
-    // Hardcoded settings.
-    this.poolSystem = new PoolSystem(this.ballColors.length);
 
     // Create a ball for every ball color we get.
     for (let idx = 0; idx < this.ballColors.length; idx++) {
@@ -42,6 +45,10 @@ class Game {
 
       this.balls.push(new Ball(pos, color));
     }
+
+    // Hardcoded settings.
+    this.poolSystem = new PoolSystem(this.ballColors.length);
+    this.cueStick = new CueStick(this.poolSystem, 0);
   }
 
   /**
@@ -49,10 +56,6 @@ class Game {
    * @param {float} deltaTime time elapsed
    */
   update(deltaTime) {
-    // TODO: once positions have been set for all balls,
-    // handle collisions for each ball
-    // (and update them in the new state too!);
-
     // Integrate each particle in the current state.
     let new_state = Integrator.integrate(
       this.poolSystem,
@@ -85,12 +88,13 @@ class Game {
       }
     }
 
-    // TODO: handle ball on ball intersection.
+    // Handle ball on ball intersection.
     for (let i = 0; i < this.balls.length; i++) {
       const ball1 = this.balls[i];
       for (let j = i + 1; j < this.balls.length; j++) {
         const ball2 = this.balls[j];
         if (ball1.intersectBall(ball2)) {
+          // TODO: Calculate new velocity vectors for both balls.
           print('intersection!');
         }
       }
