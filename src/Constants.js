@@ -11,4 +11,9 @@ const Table = {
   color: color(50, 80, 30),
   width: 400,
   height: 800,
+  mu: 1,  // Coefficient of friction of the table.
+}
+
+const Physics = {
+  gravityMag: 0.13,
 }

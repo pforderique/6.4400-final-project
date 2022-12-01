@@ -15,7 +15,7 @@ function setup() {
   let stepSize = 0.25;
   game = new Game(initialState, ballColors, stepSize);
 
-  game.poolSystem.applyForce(0, createVector(0, 64).mult(2));
+  game.poolSystem.applyForce(0, createVector(16, 64).mult(2));
 }
 
 function draw() {

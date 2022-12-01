@@ -7,7 +7,7 @@ class PoolSystem {
   appliedForces = [];
 
   /**
-   * 
+   *
    * @param {int} numBalls the number of balls in the system.
    */
   constructor(numBalls) {
@@ -32,11 +32,17 @@ class PoolSystem {
     const newVelocities = [];
 
     for (let idx = 0; idx < state.positions.length; idx++) {
+      const vel = state.velocities[idx];
+      const frictionForce = vel
+        .copy()
+        .rotate(PI)
+        .setMag(Table.mu * Ball.MASS * Physics.gravityMag);
+      createVector().rotate()
       const appliedForce = this.appliedForces[idx]; // Vector
       this.appliedForces[idx] = createVector(0, 0); // Reset once force is applied.
 
-      const net_force = appliedForce; // .add(force1).add(force2)...
-      const acceleration_i  = (net_force).mult(1.0/Ball.MASS);
+      const net_force = appliedForce.add(frictionForce); // .add(force1).add(force2)...
+      const acceleration_i = net_force.mult(1.0 / Ball.MASS);
 
       newVelocities.push(acceleration_i);
     }
