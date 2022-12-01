@@ -6,3 +6,9 @@ const Colors = {
   RED: color(120, 50, 30),
   WHITE: color(255),
 };
+
+const Table = {
+  color: color(50, 80, 30),
+  width: 400,
+  height: 800,
+}

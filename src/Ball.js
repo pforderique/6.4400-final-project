@@ -4,7 +4,7 @@
  * Holds internal position of the ball
  */
 class Ball {
-  static RADIUS = 40;
+  static RADIUS = 20;
   static MASS = 1;
 
   position = null;
@@ -20,10 +20,31 @@ class Ball {
   }
 
   /**
+   * @returns {string | bool} "top", "bottom", "left", "right",
+   *  or false depending on intersection.
+   */
+  intersectTable() {
+    if (this.position.y - Ball.RADIUS < 0) return "top";
+    if (this.position.y + Ball.RADIUS > Table.height) return "bottom";
+    if (this.position.x - Ball.RADIUS < 0) return "left";
+    if (this.position.x + Ball.RADIUS > Table.width) return "right";
+    return false;
+  }
+
+  /**
+   * Checks if there's an intersection with another ball.
+   * @param {Ball} other other ball
+   * @returns {bool} true if intersection exists, else false
+   */
+  intersectBall(other) {
+    // TODO
+  }
+
+  /**
    * Show ball at its current position.
    */
   show() {
     fill(this.color);
-    ellipse(this.position.x, this.position.y, Ball.RADIUS);
+    ellipse(this.position.x, this.position.y, Ball.RADIUS*2);
   }
 }

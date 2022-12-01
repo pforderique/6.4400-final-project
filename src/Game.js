@@ -49,19 +49,52 @@ class Game {
    * @param {float} deltaTime time elapsed
    */
   update(deltaTime) {
-    // TODO: find next position of all balls and then handle collisions for each
+    // TODO: once positions have been set for all balls,
+    // handle collisions for each ball
+    // (and update them in the new state too!);
 
     // Integrate each particle in the current state.
     let new_state = Integrator.integrate(
-      this.poolSystem, this.currentState, this.stepSize);
+      this.poolSystem,
+      this.currentState,
+      this.stepSize
+    );
+
+    const hitDamp = 0.8; // How much energy is "retained" after collision [0, 1]
+    // Handle table intersection.
+    for (let idx = 0; idx < this.balls.length; idx++) {
+      const ball = this.balls[idx];
+      const pos = new_state.positions[idx];
+      const vel = new_state.velocities[idx];
+      const tableIntersection = ball.intersectTable();
+
+      if (!tableIntersection) continue;
+
+      if (tableIntersection === "left") {
+        pos.x = Ball.RADIUS; // Clamp the x position.
+        vel.x *= -hitDamp; // Negate x dir for perfect reflection.
+      } else if (tableIntersection === "right") {
+        pos.x = Table.width - Ball.RADIUS;
+        vel.x *= -hitDamp;
+      } else if (tableIntersection === "top") {
+        pos.y = Ball.RADIUS; // Clamp the y position.
+        vel.y *= -hitDamp; // Negate y dir for perfect reflection.
+      } else if (tableIntersection === "bottom") {
+        pos.y = Table.height - Ball.RADIUS;
+        vel.y *= -hitDamp;
+      }
+    }
+
+    // TODO: handle ball on ball intersection.
+
+
     for (let idx = 0; idx < new_state.positions.length; idx++) {
       this.balls[idx].position = new_state.positions[idx];
     }
     this.currentState = new_state;
-  
   }
 
   render() {
-    this.balls.forEach(ball => ball.show());
+    this.balls.forEach((ball) => ball.show());
   }
 }

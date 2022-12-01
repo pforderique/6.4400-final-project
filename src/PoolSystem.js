@@ -50,6 +50,5 @@ class PoolSystem {
    */
   applyForce(idx, force) {
     this.appliedForces[idx] = force;
-    print(this.appliedForces);
   }
 }
