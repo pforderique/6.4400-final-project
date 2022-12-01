@@ -29,10 +29,10 @@ class Game {
   constructor(initState, ballcolors, stepsize) {
     if (initState.positions.length != ballcolors.length)
       throw new Error("Ball color array size must match state vector sizes.");
-      
+
     if (!ballcolors.length || ballcolors[0] !== Colors.WHITE)
       throw new Error("White ball MUST be the first color in `ballColors`.");
-    
+
     this.initialState = initState.copy();
     this.currentState = initState.copy();
     this.ballColors = ballcolors;
@@ -63,8 +63,11 @@ class Game {
       this.stepSize
     );
 
-    const hitDamp = 0.8; // How much energy is "retained" after collision [0, 1]
+    // TODO: Handle "corner" collisions - should remove the ball from the list
+    //  edge case: white ball falls in.. what happens?
+
     // Handle table intersection.
+    const hitDamp = 0.8; // How much energy is "retained" after collision [0, 1]
     for (let idx = 0; idx < this.balls.length; idx++) {
       const ball = this.balls[idx];
       const pos = new_state.positions[idx];
@@ -95,7 +98,9 @@ class Game {
         const ball2 = this.balls[j];
         if (ball1.intersectBall(ball2)) {
           // TODO: Calculate new velocity vectors for both balls.
-          print('intersection!');
+          //  https://www.gamedeveloper.com/programming/physics-on-the-back-of-a-cocktail-napkin
+          //  http://www.physics.usyd.edu.au/~cross/Billiards.htm
+          print("intersection!");
         }
       }
     }

@@ -37,9 +37,8 @@ class PoolSystem {
         .copy()
         .rotate(PI)
         .setMag(Table.mu * Ball.MASS * Physics.gravityMag);
-      createVector().rotate()
 
-      // TODO: Calculate wind resistance force.
+      // TODO: Calculate wind resistance force like HW3.
       // ...
 
       // Get the applied force on this ball by user (if any).

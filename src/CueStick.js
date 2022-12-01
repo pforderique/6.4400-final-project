@@ -4,11 +4,24 @@
  * Represents the cue stick in the game.
  */
 class CueStick {
-  constructor(poolSys, whiteBallIdx) {
+  static LENGTH = 500;
+
+  /**
+   * 
+   * @param {PoolSystem} poolSys the system
+   * @param {int} whiteBallIdx index that the white ball occurs in (should be 0!)
+   */
+  constructor(poolSys, whiteBallIdx = 0) {
     this.sys = poolSys;
     this.whiteBallIdx = whiteBallIdx;
   }
 
+  /**
+   * Displays the cue stick and hit vector.
+   * @param {ParticleState} currentState current state vector of game
+   * @param {float} mX mouseX
+   * @param {float} mY mouseY
+   */
   showCueVector(currentState, mX, mY) {
     const whiteBallPos = currentState.positions[this.whiteBallIdx];
 
@@ -25,7 +38,7 @@ class CueStick {
     const xDist = mX - whiteBallPos.x;
     const yDist = mY - whiteBallPos.y;
     const ballOffset = createVector(-xDist, -yDist).setMag(1.2 * Ball.RADIUS);
-    const cue = createVector(xDist, yDist).setMag(Table.cueLength);
+    const cue = createVector(xDist, yDist).setMag(CueStick.LENGTH);
     stroke(Colors.WOOD);
     strokeWeight(8);
     line(
@@ -37,6 +50,13 @@ class CueStick {
     pop();
   }
 
+  /**
+   * Check if cue stick can be displayed.
+   * @param {ParticleState} currentState current state vector of game
+   * @param {float} mX mouseX
+   * @param {float} mY mouseY
+   * @returns {bool} true if cue can be shown, else false.
+   */
   canShow(currentState, mX, mY) {
     const whiteBallVel = currentState.velocities[this.whiteBallIdx];
     const stationaryEpsilon = 0.05;
@@ -52,6 +72,12 @@ class CueStick {
     );
   }
 
+  /**
+   * Calculates hit force and applies it to white ball.
+   * @param {ParticleState} currentState current state vector of game
+   * @param {float} mX mouseX
+   * @param {float} mY mouseY
+   */
   shoot(currentState, mX, mY) {
     const whiteBallPos = currentState.positions[this.whiteBallIdx];
     const xDist = mX - whiteBallPos.x;

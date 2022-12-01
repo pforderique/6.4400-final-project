@@ -17,6 +17,8 @@ class Ball {
   constructor(pos, color = null) {
     this.position = pos;
     this.color = color ? color : Colors.WHITE; // Defaults to white ball.
+    // TODO: take in an optional texture to render instead of a plain color ?
+    //  https://p5js.org/reference/#/p5/texture ?
   }
 
   /**

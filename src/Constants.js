@@ -6,17 +6,16 @@ const Colors = {
   RED: color(120, 50, 30),
   WHITE: color(255),
   BLACK: color(0),
-  WOOD: color(150, 111, 51), 
+  WOOD: color(150, 111, 51),
 };
 
 const Table = {
   color: color(50, 80, 30),
   width: 400,
   height: 800,
-  cueLength: 300,
-  mu: 1,  // Coefficient of friction of the table.
-}
+  mu: 1, // Coefficient of friction of the table.
+};
 
 const Physics = {
   gravityMag: 0.13,
-}
+};
