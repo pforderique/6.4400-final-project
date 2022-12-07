@@ -13,6 +13,7 @@ class Game {
   stepSize = null;
 
   balls = [];
+  holes = [];
   whiteBallIdx = 0;
   currentTime = 0;
   integrator = null;
@@ -46,6 +47,16 @@ class Game {
       this.balls.push(new Ball(pos, color));
     }
 
+    // Hardcoding the holes to where they should be.
+    // TODO: Make this dynamic.
+    this.holes.push(new Hole(createVector(0, 0)));
+    this.holes.push(new Hole(createVector(Table.width, 0)));
+    this.holes.push(new Hole(createVector(0, Table.height / 2)));
+    this.holes.push(new Hole(createVector(Table.width, Table.height / 2)));
+    this.holes.push(new Hole(createVector(0, Table.height)));
+    this.holes.push(new Hole(createVector(Table.width, Table.height)));
+
+
     // Hardcoded settings.
     this.poolSystem = new PoolSystem(this.ballColors.length);
     this.cueStick = new CueStick(this.poolSystem, 0);
@@ -62,9 +73,6 @@ class Game {
       this.currentState,
       this.stepSize
     );
-
-    // TODO: Handle "corner" collisions - should remove the ball from the list
-    //  edge case: white ball falls in.. what happens?
 
     // Handle table intersection.
     const hitDamp = 0.8; // How much energy is "retained" after collision [0, 1]
@@ -105,6 +113,24 @@ class Game {
       }
     }
 
+    // Handle collisions with holes.
+    for (let i = 0; i < this.balls.length; i++) {
+      const ball = this.balls[i];
+      for (let j = 0; j < this.holes.length; j++) {
+        const hole = this.holes[j];
+        if (hole.intersectBall(ball)) {
+          // TODO: Correct the removal logic and handle what happens when the white ball falls
+          // this.balls.splice(i, 1);
+          // new_state.positions.splice(i, 1);
+          // new_state.velocities.splice(i, 1);
+
+          // TODO: Trigger some game mechanic.
+          print("in hole!");
+          break;
+        }
+      }
+    }
+
     for (let idx = 0; idx < new_state.positions.length; idx++) {
       this.balls[idx].position = new_state.positions[idx];
     }
@@ -112,6 +138,7 @@ class Game {
   }
 
   render() {
+    this.holes.forEach((hole) => hole.show());
     this.balls.forEach((ball) => ball.show());
   }
 }
