@@ -37,8 +37,8 @@ class CueStick {
     push();
     const xDist = mX - whiteBallPos.x;
     const yDist = mY - whiteBallPos.y;
-    const ballOffset = createVector(-xDist, -yDist).setMag(1.2 * Ball.RADIUS);
-    const cue = createVector(xDist, yDist).setMag(CueStick.LENGTH);
+    const ballOffset = Vec(-xDist, -yDist).setMag(1.2 * Ball.RADIUS);
+    const cue = Vec(xDist, yDist).setMag(CueStick.LENGTH);
     stroke(Colors.WOOD);
     strokeWeight(8);
     line(
@@ -83,7 +83,7 @@ class CueStick {
     const xDist = mX - whiteBallPos.x;
     const yDist = mY - whiteBallPos.y;
 
-    const force = createVector(xDist, yDist);
+    const force = Vec(xDist, yDist);
     this.sys.applyForce(this.whiteBallIdx, force);
   }
 }

@@ -20,3 +20,5 @@ const Table = {
 const Physics = {
   gravityMag: 0.13,
 };
+
+const Vec = createVector;

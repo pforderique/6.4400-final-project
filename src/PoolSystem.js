@@ -12,7 +12,7 @@ class PoolSystem {
    */
   constructor(numBalls) {
     for (let _ = 0; _ < numBalls; _++) {
-      this.appliedForces.push(createVector(0, 0));
+      this.appliedForces.push(Vec(0, 0));
     }
   }
   /**
@@ -43,7 +43,7 @@ class PoolSystem {
 
       // Get the applied force on this ball by user (if any).
       const appliedForce = this.appliedForces[idx]; // Vector
-      this.appliedForces[idx] = createVector(0, 0); // Reset once force is applied.
+      this.appliedForces[idx] = Vec(0, 0); // Reset once force is applied.
 
       // Sum all forces to find final acceleration.
       const net_force = appliedForce.add(frictionForce); // .add(force1).add(force2)...

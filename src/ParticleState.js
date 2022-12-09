@@ -48,7 +48,7 @@ class ParticleState {
     for (let idx = 0; idx < this.positions.length; idx++) {
       this.positions[idx].mult(k);
       this.velocities[idx].mult(k);
-      createVector
+      Vec
     }
     return this;
   }

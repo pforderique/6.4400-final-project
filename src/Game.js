@@ -48,14 +48,7 @@ class Game {
     }
 
     // Hardcoding the holes to where they should be.
-    // TODO: Make this dynamic.
-    this.holes.push(new Hole(createVector(0, 0)));
-    this.holes.push(new Hole(createVector(Table.width, 0)));
-    this.holes.push(new Hole(createVector(0, Table.height / 2)));
-    this.holes.push(new Hole(createVector(Table.width, Table.height / 2)));
-    this.holes.push(new Hole(createVector(0, Table.height)));
-    this.holes.push(new Hole(createVector(Table.width, Table.height)));
-
+    this.#addHoles();
 
     // Hardcoded settings.
     this.poolSystem = new PoolSystem(this.ballColors.length);
@@ -119,10 +112,13 @@ class Game {
       for (let j = 0; j < this.holes.length; j++) {
         const hole = this.holes[j];
         if (hole.intersectBall(ball)) {
-          // TODO: Correct the removal logic and handle what happens when the white ball falls
-          // this.balls.splice(i, 1);
-          // new_state.positions.splice(i, 1);
-          // new_state.velocities.splice(i, 1);
+          this.balls.splice(i, 1);
+          new_state.positions.splice(i, 1);
+          new_state.velocities.splice(i, 1);
+          this.poolSystem.appliedForces.pop();
+
+          if (i === 0) // 0th ball index is alway the white ball.
+            // TODO: handle what happens when the white ball falls
 
           // TODO: Trigger some game mechanic.
           print("in hole!");
@@ -135,6 +131,19 @@ class Game {
       this.balls[idx].position = new_state.positions[idx];
     }
     this.currentState = new_state;
+  }
+
+  #addHoles() {
+    // TODO: Make this dynamic.
+    const holeOffset = 5;
+    this.holes.push(new Hole(Vec(0 + holeOffset, 0 + holeOffset))); // Top left
+    this.holes.push(new Hole(Vec(Table.width - holeOffset, 0 + holeOffset))); // Top right
+    this.holes.push(new Hole(Vec(0 - holeOffset, Table.height / 2))); // Middle Left
+    this.holes.push(new Hole(Vec(Table.width, Table.height / 2))); // Middle Right
+    this.holes.push(new Hole(Vec(0 + holeOffset, Table.height - holeOffset))); // Bottom Left
+    this.holes.push(
+      new Hole(Vec(Table.width - holeOffset, Table.height - holeOffset))
+    ); // Bottom Right
   }
 
   render() {

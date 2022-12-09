@@ -8,8 +8,8 @@ function setup() {
   last_tick_time = millis();
 
   let initialState = new ParticleState(
-    [createVector(50, Table.height - 100), createVector(50, 300)],
-    [createVector(0, 0), createVector(0, 0)]
+    [Vec(50, Table.height - 100), Vec(50, 300)],
+    [Vec(0, 0), Vec(0, 0)]
   );
   let ballColors = [Colors.WHITE, Colors.BLUE];
   let stepSize = 0.25;

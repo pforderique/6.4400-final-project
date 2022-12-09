@@ -4,7 +4,7 @@
  * Holds internal position of the ball
  */
 class Ball {
-  static RADIUS = 20;
+  static RADIUS = 15;
   static MASS = 1;
 
   position = null;
