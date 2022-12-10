@@ -95,13 +95,36 @@ class Game {
     // Handle ball on ball intersection.
     for (let i = 0; i < this.balls.length; i++) {
       const ball1 = this.balls[i];
+      const x1 = new_state.positions[i];
+      const v1 = new_state.velocities[i];
       for (let j = i + 1; j < this.balls.length; j++) {
         const ball2 = this.balls[j];
+        const x2 = new_state.positions[j];
+        const v2 = new_state.velocities[j];
+
         if (ball1.intersectBall(ball2)) {
           // TODO: Calculate new velocity vectors for both balls.
-          //  https://www.gamedeveloper.com/programming/physics-on-the-back-of-a-cocktail-napkin
-          //  http://www.physics.usyd.edu.au/~cross/Billiards.htm
-          print("intersection!");
+          const normal = ball2.position.copy().sub(ball1.position).normalize();
+          const tangent = Vec(-normal.y, normal.x).normalize();
+
+          const v1_final = normal
+            .copy()
+            .mult(normal.copy().dot(v2.copy()))
+            .add(tangent.copy().mult(tangent.copy().dot(v1.copy())));
+
+          const v2_final = normal
+            .copy()
+            .mult(normal.copy().dot(v1.copy()))
+            .add(tangent.copy().mult(tangent.copy().dot(v2.copy())));
+
+          [v1.x, v1.y] = [v1_final.x, v1_final.y];
+          [v2.x, v2.y] = [v2_final.x, v2_final.y];
+
+          // Forward update the positions so there's not a duplicate collision.
+          x1.x += v1.x;
+          x1.y += v1.y;
+          x2.x += v2.x;
+          x2.y += v2.y;
         }
       }
     }
@@ -117,11 +140,12 @@ class Game {
           new_state.velocities.splice(i, 1);
           this.poolSystem.appliedForces.pop();
 
-          if (i === 0) // 0th ball index is alway the white ball.
+          if (i === 0)
+            // 0th ball index is alway the white ball.
             // TODO: handle what happens when the white ball falls
 
-          // TODO: Trigger some game mechanic.
-          print("in hole!");
+            // TODO: Trigger some game mechanic.
+            print("in hole!");
           break;
         }
       }

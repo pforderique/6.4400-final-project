@@ -8,11 +8,11 @@ function setup() {
   last_tick_time = millis();
 
   let initialState = new ParticleState(
-    [Vec(50, Table.height - 100), Vec(50, 300)],
+    [Vec(200, Table.height - 400), Vec(200, 200)],
     [Vec(0, 0), Vec(0, 0)]
   );
   let ballColors = [Colors.WHITE, Colors.BLUE];
-  let stepSize = 0.25;
+  let stepSize = 0.15;
   game = new Game(initialState, ballColors, stepSize);
 
   // game.poolSystem.applyForce(0, createVector(16, 64).mult(2));
