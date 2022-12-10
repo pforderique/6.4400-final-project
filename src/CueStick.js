@@ -83,6 +83,7 @@ class CueStick {
     const xDist = mX - whiteBallPos.x;
     const yDist = mY - whiteBallPos.y;
 
+    // const force = Vec(xDist, yDist).mult(100); // TODO: if using small step size, we need to increase force
     const force = Vec(xDist, yDist);
     this.sys.applyForce(this.whiteBallIdx, force);
   }

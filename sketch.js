@@ -7,12 +7,29 @@ function setup() {
   // Start the clock.
   last_tick_time = millis();
 
+  const ballColors = [
+    Colors.WHITE,
+    Colors.YELLOW,
+    Colors.RED,
+    Colors.BLUE,
+    Colors.GREEN,
+    Colors.ORANGE,
+    Colors.PURPLE,
+  ];
+  const positions = [
+    Vec(200, Table.height - 150),
+    Vec(200, 250),
+    Vec(200 - 1.5*Ball.RADIUS, 250 - 2.5*Ball.RADIUS),
+    Vec(200 + 1.5*Ball.RADIUS, 250 - 2.5*Ball.RADIUS),
+    Vec(200 - 3*Ball.RADIUS, 250 - 2*2.5*Ball.RADIUS),
+    Vec(200, 250 - 2*2.5*Ball.RADIUS),
+    Vec(200 + 3*Ball.RADIUS, 250 - 2*2.5*Ball.RADIUS),
+  ];
   let initialState = new ParticleState(
-    [Vec(200, Table.height - 400), Vec(200, 200)],
-    [Vec(0, 0), Vec(0, 0)]
+    positions,
+    positions.map((pos) => Vec(0, 0))
   );
-  let ballColors = [Colors.WHITE, Colors.BLUE];
-  let stepSize = 0.15;
+  const stepSize = 0.15;
   game = new Game(initialState, ballColors, stepSize);
 
   // game.poolSystem.applyForce(0, createVector(16, 64).mult(2));
@@ -30,10 +47,13 @@ function draw() {
 
   if (game.cueStick.canShow(game.currentState, mouseX, mouseY))
     game.cueStick.showCueVector(game.currentState, mouseX, mouseY);
+
+  fill(Colors.WHITE);
+  ellipse(200, 530, 5, 5);
 }
 
 function mouseClicked(event) {
   if (game.cueStick.canShow(game.currentState, mouseX, mouseY))
     game.cueStick.shoot(game.currentState, mouseX, mouseY);
-  // print(mouseX, mouseY);
+  print(mouseX, mouseY);
 }

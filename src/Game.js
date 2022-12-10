@@ -48,7 +48,7 @@ class Game {
     }
 
     // Hardcoding the holes to where they should be.
-    this.#addHoles();
+    // this.#addHoles();
 
     // Hardcoded settings.
     this.poolSystem = new PoolSystem(this.ballColors.length);
@@ -125,6 +125,7 @@ class Game {
           x1.y += v1.y;
           x2.x += v2.x;
           x2.y += v2.y;
+          print("ball intersect!");
         }
       }
     }
