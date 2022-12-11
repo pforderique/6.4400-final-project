@@ -158,7 +158,7 @@ class Game {
     this.currentState = new_state;
   }
 
-  #addHoles() {
+  addHoles() {
     // TODO: Make this dynamic.
     const holeOffset = 5;
     this.holes.push(new Hole(Vec(0 + holeOffset, 0 + holeOffset))); // Top left
