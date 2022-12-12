@@ -4,7 +4,7 @@
  * Contains the method for calculting the Time Derivative given the system.
  */
 class PoolSystem {
-  static WIND_FORCE = Vec(0, 0);
+  static WIND_FORCE = Vec(100, 0);
   appliedForces = [];
 
   /**

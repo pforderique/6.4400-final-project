@@ -148,7 +148,7 @@ class Game {
             // Handles what happens when the white ball falls
             this.needWhiteBall = true;
             // TODO: General, but add user interface to give update on game state
-
+            
             // TODO: Trigger some game mechanic.
             print("in hole!");
           }
@@ -191,6 +191,11 @@ class Game {
           if (centersDist < 2 * Ball.RADIUS)
             return false;
         }
+        for (let i = 0; i < this.holes.length; i++) {
+          const centersDist = dist(mX, mY, this.holes[i].position.x, this.holes[i].position.y);
+          if (centersDist < 2 * Hole.RADIUS)
+            return false;
+        }
         return true;
     }
     return false;
@@ -204,6 +209,8 @@ class Game {
   placeWhiteBall(mX, mY) {
     const pos = Vec(mX, mY);
     const color = this.ballColors[this.whiteBallIdx];
+  
+    // Place the new white ball back to where the original ball was in the array.
     this.balls.splice(this.whiteBallIdx, 0, new Ball(pos, color));
     this.currentState.positions.splice(this.whiteBallIdx, 0, pos);
     this.currentState.velocities.splice(this.whiteBallIdx, 0, Vec(0, 0));
