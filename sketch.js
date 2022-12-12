@@ -48,9 +48,6 @@ function draw() {
   if (!game.showWhiteOutline(mouseX, mouseY) && game.cueStick.canShow(game.currentState, mouseX, mouseY)) {
     game.cueStick.showCueVector(game.currentState, mouseX, mouseY);
   }
-    
-  fill(Colors.WHITE);
-  ellipse(200, 360, 5, 5);
 }
 
 function mouseClicked(event) {
