@@ -61,5 +61,4 @@ function mouseClicked(event) {
     game.placeWhiteBall(mouseX, mouseY);
   else if (!game.needWhiteBall && game.cueStick.canShow(game.currentState, mouseX, mouseY))
     game.cueStick.shoot(game.currentState, mouseX, mouseY);
-  print(mouseX, mouseY);
 }

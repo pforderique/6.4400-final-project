@@ -22,6 +22,7 @@ const Table = {
 
 const Physics = {
   gravityMag: 0.13,
+  dragC: 0.001,
 };
 
 const Vec = createVector;
