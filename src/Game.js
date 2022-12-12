@@ -128,7 +128,6 @@ class Game {
           x1.y += v1.y;
           x2.x += v2.x;
           x2.y += v2.y;
-          print("ball intersect!");
         }
       }
     }
