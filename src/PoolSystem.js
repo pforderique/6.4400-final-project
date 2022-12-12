@@ -4,6 +4,7 @@
  * Contains the method for calculting the Time Derivative given the system.
  */
 class PoolSystem {
+  static WIND_FORCE = Vec(0, 0);
   appliedForces = [];
 
   /**
@@ -39,7 +40,7 @@ class PoolSystem {
         .setMag(Table.mu * Ball.MASS * Physics.gravityMag);
 
       // TODO: Calculate wind resistance force like HW3.
-      // ...
+      // const windForce = Ball.MASS * Physics.WIND_FORCE;
 
       // Get the applied force on this ball by user (if any).
       const appliedForce = this.appliedForces[idx]; // Vector

@@ -36,6 +36,7 @@ class Hole {
    * Show hole at its current position.
    */
   show() {
+    drawingContext.setLineDash([]); // Set line to solid line.
     fill(this.color);
     ellipse(this.position.x, this.position.y, Hole.RADIUS * 2);
   }

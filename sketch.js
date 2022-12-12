@@ -45,15 +45,18 @@ function draw() {
 
   last_tick_time = current_tick_time;
 
-  if (game.cueStick.canShow(game.currentState, mouseX, mouseY))
+  if (!game.showWhiteOutline(mouseX, mouseY) && game.cueStick.canShow(game.currentState, mouseX, mouseY)) {
     game.cueStick.showCueVector(game.currentState, mouseX, mouseY);
-
+  }
+    
   fill(Colors.WHITE);
   ellipse(200, 530, 5, 5);
 }
 
 function mouseClicked(event) {
-  if (game.cueStick.canShow(game.currentState, mouseX, mouseY))
+  if (game.showWhiteOutline(mouseX, mouseY))
+    game.placeWhiteBall(mouseX, mouseY);
+  else if (game.cueStick.canShow(game.currentState, mouseX, mouseY))
     game.cueStick.shoot(game.currentState, mouseX, mouseY);
   print(mouseX, mouseY);
 }

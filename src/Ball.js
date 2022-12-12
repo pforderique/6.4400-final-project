@@ -14,7 +14,7 @@ class Ball {
    * @param {Vector} pos position vector
    * @param {Color} color ball color
    */
-  constructor(pos, color = null) {
+  constructor(pos, color = null, texture = null) {
     this.position = pos;
     this.color = color ? color : Colors.WHITE; // Defaults to white ball.
     // TODO: take in an optional texture to render instead of a plain color ?
@@ -52,6 +52,7 @@ class Ball {
    * Show ball at its current position.
    */
   show() {
+    drawingContext.setLineDash([]); // Set line to solid line.
     fill(this.color);
     ellipse(this.position.x, this.position.y, Ball.RADIUS * 2);
   }

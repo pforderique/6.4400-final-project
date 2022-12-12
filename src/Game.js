@@ -19,6 +19,7 @@ class Game {
   integrator = null;
   poolSystem = null;
   cueStick = null;
+  needWhiteBall = null;
 
   /**
    *
@@ -46,9 +47,12 @@ class Game {
 
       this.balls.push(new Ball(pos, color));
     }
+    
+    // A boolean to keep track if we need a white ball.
+    this.needWhiteBall = false;
 
     // Hardcoding the holes to where they should be.
-    // this.#addHoles();
+    this.addHoles();
 
     // Hardcoded settings.
     this.poolSystem = new PoolSystem(this.ballColors.length);
@@ -139,14 +143,17 @@ class Game {
           this.balls.splice(i, 1);
           new_state.positions.splice(i, 1);
           new_state.velocities.splice(i, 1);
-          this.poolSystem.appliedForces.pop();
+          this.poolSystem.appliedForces.splice(i, 1);
 
-          if (i === 0)
+          if (i === this.whiteBallIdx) {
             // 0th ball index is alway the white ball.
-            // TODO: handle what happens when the white ball falls
+            // Handles what happens when the white ball falls
+            this.needWhiteBall = true;
+            // TODO: General, but add user interface to give update on game state
 
             // TODO: Trigger some game mechanic.
             print("in hole!");
+          }
           break;
         }
       }
@@ -156,6 +163,43 @@ class Game {
       this.balls[idx].position = new_state.positions[idx];
     }
     this.currentState = new_state;
+  }
+
+  /**
+   * Shows the outline of the white ball to be placed.
+   * @param {float} mX mouseX
+   * @param {float} mY mouseY
+   * @returns {bool} true if the ball can be placed, else false.
+   */
+  showWhiteOutline(mX, mY) {
+    // setLineDash([10, 10]); // longer stitches
+    if (game.needWhiteBall &&
+    0 < mX &&
+    mX < Table.width &&
+    0 < mY &&
+    mY < Table.height) {
+      drawingContext.setLineDash([5, 5]); // Set line to dotted line.
+      noFill();
+      ellipse(mX, mY, Ball.RADIUS * 2);
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Replace the missing white ball at the correct location.
+   * @param {float} mX mouseX
+   * @param {float} mY mouseY
+   */
+  placeWhiteBall(mX, mY) {
+    const pos = Vec(mX, mY);
+    const color = this.ballColors[this.whiteBallIdx];
+    this.balls.splice(this.whiteBallIdx, 0, new Ball(pos, color));
+    this.currentState.positions.splice(this.whiteBallIdx, 0, pos);
+    this.currentState.velocities.splice(this.whiteBallIdx, 0, Vec(0, 0));
+    this.poolSystem.appliedForces.splice(this.whiteBallIdx, 0, Vec(0, 0));
+    this.cueStick = new CueStick(this.poolSystem, this.whiteBallIdx);
+    this.needWhiteBall = false;
   }
 
   addHoles() {
