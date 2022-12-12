@@ -169,19 +169,31 @@ class Game {
    * Shows the outline of the white ball to be placed.
    * @param {float} mX mouseX
    * @param {float} mY mouseY
-   * @returns {bool} true if the ball can be placed, else false.
    */
-  showWhiteOutline(mX, mY) {
-    // setLineDash([10, 10]); // longer stitches
-    if (game.needWhiteBall &&
-    0 < mX &&
-    mX < Table.width &&
-    0 < mY &&
-    mY < Table.height) {
-      drawingContext.setLineDash([5, 5]); // Set line to dotted line.
-      noFill();
-      ellipse(mX, mY, Ball.RADIUS * 2);
-      return true;
+  showBallOutline(mX, mY) {
+    drawingContext.setLineDash([5, 5]); // Set line to dotted line.
+    noFill();
+    ellipse(mX, mY, Ball.RADIUS * 2);
+  }
+
+  /**
+   * Check to see if the ball can be placed without intersecting other balls.
+   * @param {float} mX mouseX
+   * @param {float} mY mouseY
+   * @returns {bool} true if the ball can be placed, else false.
+  */
+  canPlaceBall(mX, mY) {
+    // Handle collisions with holes.
+    if (0 < mX &&
+        mX < Table.width &&
+        0 < mY &&
+        mY < Table.height){
+        for (let i = 0; i < this.balls.length; i++) {
+          const centersDist = dist(mX, mY, this.balls[i].position.x, this.balls[i].position.y);
+          if (centersDist < 2 * Ball.RADIUS)
+            return false;
+        }
+        return true;
     }
     return false;
   }
@@ -199,7 +211,8 @@ class Game {
     this.currentState.velocities.splice(this.whiteBallIdx, 0, Vec(0, 0));
     this.poolSystem.appliedForces.splice(this.whiteBallIdx, 0, Vec(0, 0));
     this.cueStick = new CueStick(this.poolSystem, this.whiteBallIdx);
-    this.needWhiteBall = false;
+
+    this.needWhiteBall = false; // Reset the boolean so the game can unfreeze.
   }
 
   addHoles() {

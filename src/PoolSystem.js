@@ -39,7 +39,7 @@ class PoolSystem {
         .rotate(PI)
         .setMag(Table.mu * Ball.MASS * Physics.gravityMag);
 
-      // TODO: Calculate wind resistance force like HW3.
+      // Calculate wind resistance force like HW3.
       // const windForce = Ball.MASS * Physics.WIND_FORCE;
 
       // Get the applied force on this ball by user (if any).
@@ -47,7 +47,7 @@ class PoolSystem {
       this.appliedForces[idx] = Vec(0, 0); // Reset once force is applied.
 
       // Sum all forces to find final acceleration.
-      const net_force = appliedForce.add(frictionForce); // .add(force1).add(force2)...
+      const net_force = appliedForce.add(frictionForce) // .add(windForce); // .add(force1).add(force2)...
       const acceleration_i = net_force.mult(1.0 / Ball.MASS);
 
       newVelocities.push(acceleration_i);

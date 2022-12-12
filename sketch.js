@@ -45,8 +45,11 @@ function draw() {
 
   last_tick_time = current_tick_time;
 
-  if (!game.showWhiteOutline(mouseX, mouseY) && game.cueStick.canShow(game.currentState, mouseX, mouseY)) {
+  if (!game.needWhiteBall && game.cueStick.canShow(game.currentState, mouseX, mouseY)) {
     game.cueStick.showCueVector(game.currentState, mouseX, mouseY);
+  }
+  else if (game.needWhiteBall && game.canPlaceBall(mouseX, mouseY)) {
+    game.showBallOutline(mouseX, mouseY);
   }
     
   fill(Colors.WHITE);
@@ -54,9 +57,9 @@ function draw() {
 }
 
 function mouseClicked(event) {
-  if (game.showWhiteOutline(mouseX, mouseY))
+  if (game.needWhiteBall && game.canPlaceBall(mouseX, mouseY))
     game.placeWhiteBall(mouseX, mouseY);
-  else if (game.cueStick.canShow(game.currentState, mouseX, mouseY))
+  else if (!game.needWhiteBall && game.cueStick.canShow(game.currentState, mouseX, mouseY))
     game.cueStick.shoot(game.currentState, mouseX, mouseY);
   print(mouseX, mouseY);
 }
