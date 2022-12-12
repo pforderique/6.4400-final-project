@@ -107,7 +107,6 @@ class Game {
         const v2 = new_state.velocities[j];
 
         if (ball1.intersectBall(ball2)) {
-          // TODO: Calculate new velocity vectors for both balls.
           const normal = ball2.position.copy().sub(ball1.position).normalize();
           const tangent = Vec(-normal.y, normal.x).normalize();
 
@@ -159,7 +158,7 @@ class Game {
       }
     }
 
-    for (let idx = 0; idx < new_state.positions.length; idx++) {
+    for (let idx = new_state.positions.length - 1; idx >= 0; idx--) {
       this.balls[idx].position = new_state.positions[idx];
     }
     this.currentState = new_state;

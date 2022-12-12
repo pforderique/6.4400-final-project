@@ -50,7 +50,7 @@ function draw() {
   }
     
   fill(Colors.WHITE);
-  ellipse(200, 530, 5, 5);
+  ellipse(200, 360, 5, 5);
 }
 
 function mouseClicked(event) {
