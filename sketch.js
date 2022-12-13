@@ -16,9 +16,9 @@ function setup() {
 
   const width_half = Table.edge + Table.width / 2;
   const height_half = Table.edge + Table.height / 2;
-  const balls_start_point = height_half / 2;
-  const hOffset = 1.2;
-  const vOffset = 2.2;
+  const balls_start_point = Table.edge + Table.height / 4;
+  const hOffset = 1.5;
+  const vOffset = 2.5;
   const positions = [
     Vec(width_half, height_half * 1.5),
 
@@ -95,17 +95,38 @@ function draw() {
 
   last_tick_time = current_tick_time;
 
-  if (!game.needWhiteBall && game.cueStick.canShow(game.currentState, mouseX, mouseY)) {
+  if (game.timer == 0 && !game.needWhiteBall && game.cueStick.canShow(game.currentState, mouseX, mouseY)) {
     game.cueStick.showCueVector(game.currentState, mouseX, mouseY);
   }
   else if (game.needWhiteBall && game.canPlaceBall(mouseX, mouseY)) {
     game.showBallOutline(mouseX, mouseY);
   }
+
+  if (game.switch != null && game.timer == 0)
+    game.switchTurn();
+
+  // Display text
+  fill(color(0, 0, 0));
+  textSize(20);
+  textAlign(CENTER, CENTER);
+  
+  if (game.timer == 0) {
+    if (game.winner != null) {
+      text("Player " + game.turn + " wins!", UI.text_pos.x, UI.text_pos.y);
+    }
+    else {
+      text("Player " + game.turn + "'s turn!", UI.text_pos.x, UI.text_pos.y);
+    }
+  }
+  
 }
 
 function mouseClicked(event) {
-  if (game.needWhiteBall && game.canPlaceBall(mouseX, mouseY))
+  if (game.timer == 0 && game.needWhiteBall && game.canPlaceBall(mouseX, mouseY))
     game.placeWhiteBall(mouseX, mouseY);
-  else if (!game.needWhiteBall && game.cueStick.canShow(game.currentState, mouseX, mouseY))
+  else if (game.timer == 0 && !game.needWhiteBall && game.cueStick.canShow(game.currentState, mouseX, mouseY)) {
     game.cueStick.shoot(game.currentState, mouseX, mouseY);
+    game.timer = 3;
+    game.switch = true;
+  }
 }

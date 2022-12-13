@@ -14,22 +14,25 @@ class Game {
 
   turn = null;
   winner = null;
+  needWhiteBall = null;
+  timer = 0;
+  switch = null;
+
   balls = [];
   holes = [];
   removed_solid_balls = [];
   removed_stripe_balls = [];
   whiteBallIdx = 0;
+
   currentTime = 0;
   integrator = null;
   poolSystem = null;
   cueStick = null;
-  needWhiteBall = null;
 
   /**
    *
    * @param {ParticleState} initState initial state of all game balls.
-   * @param {int[]} ballnumbers array of the balls.
-   *  White ball (1) MUST be first.
+   * @param {int[]} ballnumbers array of the balls. White ball (0) MUST be first.
    * @param {float} stepsize step size to use when integrating.
    */
   constructor(initState, ballnumbers, stepsize) {
@@ -61,6 +64,8 @@ class Game {
     // Hardcoded settings.
     this.poolSystem = new PoolSystem(this.ballNumbers.length);
     this.cueStick = new CueStick(this.poolSystem, 0);
+
+    this.turn = random([BallTypes.SOLID, BallTypes.STRIPE]);
   }
 
   /**
@@ -68,6 +73,9 @@ class Game {
    * @param {float} deltaTime time elapsed
    */
   update(deltaTime) {
+    if (frameCount % 60 == 0 && this.timer > 0)
+      this.timer--;
+
     // Integrate each particle in the current state.
     let new_state = Integrator.integrate(
       this.poolSystem,
@@ -143,6 +151,8 @@ class Game {
         const hole = this.holes[j];
         if (hole.intersectBall(ball)) {
           if (ball.ball_type == BallTypes.SOLID) { // If the ball was solid
+            if (this.turn == BallTypes.SOLID)
+              this.switch = false; 
             const curr_pos = UI.solid_start + (UI.ball_offset * Ball.RADIUS) +
                              this.removed_solid_balls.length * (2 * Ball.RADIUS * UI.ball_offset);
             ball.position = Vec(UI.edge + UI.ball_offset * Ball.RADIUS,
@@ -150,19 +160,32 @@ class Game {
             this.removed_solid_balls.push(ball);
           }
           else if (ball.ball_type == BallTypes.STRIPE) { // If the ball was stripe
+            if (this.turn == BallTypes.STRIPE)
+              this.switch = false;
             const curr_pos = UI.stripe_start - (UI.ball_offset * Ball.RADIUS) -
                              this.removed_stripe_balls.length * (2 * Ball.RADIUS * UI.ball_offset);
             ball.position = Vec(UI.edge + UI.ball_offset * Ball.RADIUS,
                             curr_pos);
             this.removed_stripe_balls.push(ball);
           }
-          else if (ball.ball_type == BallTypes.EIGHT) {
-            if (this.balls.length == 1) {
-              this.winner = this.turn;
+          else if (ball.ball_type == BallTypes.EIGHT) { // If the ball was the eight ball
+            if (this.turn == BallTypes.SOLID) {
+              if (this.removed_solid_balls.length == 7)
+                this.winner = BallTypes.SOLID;
+              else
+                this.winner = BallTypes.STRIPE;
+            }
+            else {
+              if (this.removed_stripe_balls.length == 7)
+                this.winner = BallTypes.STRIPE;
+              else
+                this.winner = BallTypes.SOLID;
             }
           }
-          else {
+          else { // If the ball was the cue ball
             this.needWhiteBall = true;
+            this.switch = true;
+            this.switchTurn();
           }
           this.balls.splice(i, 1);
           new_state.positions.splice(i, 1);
@@ -176,6 +199,7 @@ class Game {
     for (let idx = new_state.positions.length - 1; idx >= 0; idx--) {
       this.balls[idx].position = new_state.positions[idx];
     }
+
     this.currentState = new_state;
   }
 
@@ -256,5 +280,11 @@ class Game {
     this.balls.forEach((ball) => ball.show());
     this.removed_solid_balls.forEach((ball) => ball.show());
     this.removed_stripe_balls.forEach((ball) => ball.show());
+  }
+
+  switchTurn() {
+    if (this.switch)
+      this.turn = this.turn == BallTypes.SOLID ? BallTypes.STRIPE : BallTypes.SOLID;
+    this.switch = null;
   }
 }

@@ -66,4 +66,10 @@ class PoolSystem {
   applyForce(idx, force) {
     this.appliedForces[idx] = force;
   }
+
+  /**
+   * Normalizes the positions so that none are over-lapping.
+   */
+  checkPositions(positions) {
+  }
 }
