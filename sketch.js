@@ -126,7 +126,7 @@ function mouseClicked(event) {
     game.placeWhiteBall(mouseX, mouseY);
   else if (game.timer == 0 && !game.needWhiteBall && game.cueStick.canShow(game.currentState, mouseX, mouseY)) {
     game.cueStick.shoot(game.currentState, mouseX, mouseY);
-    game.timer = 3;
+    game.timer = 4;
     game.switch = true;
   }
 }
