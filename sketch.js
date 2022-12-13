@@ -2,7 +2,7 @@ let game;
 let last_tick_time;
 
 function setup() {
-  createCanvas(2*Table.edge + Table.width, 2*Table.edge + Table.height);
+  createCanvas(2*Table.edge + Table.width + UI.side, 2*Table.edge + Table.height + UI.bottom);
 
   // Start the clock.
   last_tick_time = millis();
@@ -16,7 +16,7 @@ function setup() {
 
   const width_half = Table.edge + Table.width / 2;
   const height_half = Table.edge + Table.height / 2;
-  const balls_start_point = height_half * 0.7;
+  const balls_start_point = height_half / 2;
   const hOffset = 1.2;
   const vOffset = 2.2;
   const positions = [
@@ -56,12 +56,39 @@ function setup() {
 }
 
 function draw() {
-  background(Table.edgeColor);
+  background(Colors.WHITE);
   noStroke();
+
+  // Display for the dead balls
+  fill(UI.color);
+  const width = 2 * Ball.RADIUS * UI.ball_offset;
+  const len = 14 * Ball.RADIUS * UI.ball_offset;
+  rect(UI.edge, UI.solid_start, width, len, 15); // For the solid balls
+  rect(UI.edge, UI.stripe_start - len, width, len, 15); // For the solid balls
+  
+  // Table edges
+  fill(Table.edgeColor);
+  rect(0, 0, Table.width + 2*Table.edge, Table.height + 2*Table.edge, 20);
+  
+  // Inside the table
   fill(Table.color)
   rect(Table.edge, Table.edge, Table.width, Table.height, 20);
   let current_tick_time = millis();
   let delta_time = current_tick_time - last_tick_time;
+
+  // Diamonds
+  const width_half = Table.edge + Table.width / 2;
+  const height_half = Table.edge + Table.height / 2;
+  fill(Colors.WHITE);
+  for (let i = 1; i <= 3; i++) {
+    ellipse(Table.edge / 2, height_half - Table.height * i / 8, 5, 5);
+    ellipse(Table.edge / 2, height_half + Table.height * i / 8, 5, 5);
+    ellipse(Table.width + Table.edge * 1.5, height_half - Table.height * i / 8, 5, 5);
+    ellipse(Table.width + Table.edge * 1.5, height_half + Table.height * i / 8, 5, 5);
+    ellipse(Table.edge + Table.width * i / 4, Table.edge / 2, 5, 5);
+    ellipse(Table.edge + Table.width * i / 4, Table.height + Table.edge * 1.5, 5, 5);
+  }
+  ellipse(width_half, height_half * 1.5, 5, 5);
 
   game.update(delta_time);
   game.render();
@@ -74,11 +101,6 @@ function draw() {
   else if (game.needWhiteBall && game.canPlaceBall(mouseX, mouseY)) {
     game.showBallOutline(mouseX, mouseY);
   }
-  
-  const width_half = Table.edge + Table.width / 2;
-  const height_half = Table.edge + Table.height / 2;
-  fill(Colors.WHITE);
-  ellipse(width_half, height_half * 1.5, 5, 5);
 }
 
 function mouseClicked(event) {

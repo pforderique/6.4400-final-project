@@ -18,6 +18,7 @@ const BallTypes = {
   CUE: "cue",
   SOLID: "solid",
   STRIPE: "stripe",
+  EIGHT: "eight",
 };
 
 const BallNumbers = {
@@ -29,7 +30,7 @@ const BallNumbers = {
   5: [Colors.ORANGE, BallTypes.SOLID],
   6: [Colors.GREEN, BallTypes.SOLID],
   7: [Colors.MAROON, BallTypes.SOLID],
-  8: [Colors.BLACK, BallTypes.SOLID],
+  8: [Colors.BLACK, BallTypes.EIGHT],
   9: [Colors.YELLOW, BallTypes.STRIPE],
   10: [Colors.BLUE, BallTypes.STRIPE],
   11: [Colors.RED, BallTypes.STRIPE],
@@ -47,6 +48,18 @@ const Table = {
   edgeColor: Colors.REDWOOD,
   mu: 1, // Coefficient of friction of the table.
 };
+
+const UI = {
+  color: color(100, 100, 100),
+  bottom: 100,
+  side: 50,
+  ball_offset: 1.3,
+  edge: Table.width + 2*Table.edge + 5,
+  solid_start: 0,
+  stripe_start: Table.height + 2*Table.edge,
+  width: 10 + 2 * Ball.RADIUS,
+  length: 7 * 2 * Ball.RADIUS + 8 * 5,
+}
 
 const Physics = {
   gravityMag: 0.13,

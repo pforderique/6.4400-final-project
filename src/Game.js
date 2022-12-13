@@ -12,8 +12,12 @@ class Game {
   ballColors = null;
   stepSize = null;
 
+  turn = null;
+  winner = null;
   balls = [];
   holes = [];
+  removed_solid_balls = [];
+  removed_stripe_balls = [];
   whiteBallIdx = 0;
   currentTime = 0;
   integrator = null;
@@ -138,20 +142,32 @@ class Game {
       for (let j = 0; j < this.holes.length; j++) {
         const hole = this.holes[j];
         if (hole.intersectBall(ball)) {
+          if (ball.ball_type == BallTypes.SOLID) { // If the ball was solid
+            const curr_pos = UI.solid_start + (UI.ball_offset * Ball.RADIUS) +
+                             this.removed_solid_balls.length * (2 * Ball.RADIUS * UI.ball_offset);
+            ball.position = Vec(UI.edge + UI.ball_offset * Ball.RADIUS,
+                            curr_pos);
+            this.removed_solid_balls.push(ball);
+          }
+          else if (ball.ball_type == BallTypes.STRIPE) { // If the ball was stripe
+            const curr_pos = UI.stripe_start - (UI.ball_offset * Ball.RADIUS) -
+                             this.removed_stripe_balls.length * (2 * Ball.RADIUS * UI.ball_offset);
+            ball.position = Vec(UI.edge + UI.ball_offset * Ball.RADIUS,
+                            curr_pos);
+            this.removed_stripe_balls.push(ball);
+          }
+          else if (ball.ball_type == BallTypes.EIGHT) {
+            if (this.balls.length == 1) {
+              this.winner = this.turn;
+            }
+          }
+          else {
+            this.needWhiteBall = true;
+          }
           this.balls.splice(i, 1);
           new_state.positions.splice(i, 1);
           new_state.velocities.splice(i, 1);
           this.poolSystem.appliedForces.splice(i, 1);
-
-          if (i === this.whiteBallIdx) {
-            // 0th ball index is alway the white ball.
-            // Handles what happens when the white ball falls
-            this.needWhiteBall = true;
-            // TODO: General, but add user interface to give update on game state
-            
-            // TODO: Trigger some game mechanic.
-            print("in hole!");
-          }
           break;
         }
       }
@@ -238,5 +254,7 @@ class Game {
   render() {
     this.holes.forEach((hole) => hole.show());
     this.balls.forEach((ball) => ball.show());
+    this.removed_solid_balls.forEach((ball) => ball.show());
+    this.removed_stripe_balls.forEach((ball) => ball.show());
   }
 }
