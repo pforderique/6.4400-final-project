@@ -112,7 +112,7 @@ function draw() {
   
   if (game.timer == 0) {
     if (game.winner != null) {
-      text("Player " + game.turn + " wins!", UI.text_pos.x, UI.text_pos.y);
+      text("Player " + game.winner + " wins!", UI.text_pos.x, UI.text_pos.y);
     }
     else {
       text("Player " + game.turn + "'s turn!", UI.text_pos.x, UI.text_pos.y);
