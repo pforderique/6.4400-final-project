@@ -66,9 +66,9 @@ class CueStick {
       abs(whiteBallVel.y) < stationaryEpsilon &&
       // Mouse within screen.
       0 < mX &&
-      mX < Table.width &&
+      mX < Table.width + 2 * Table.edge &&
       0 < mY &&
-      mY < Table.height
+      mY < Table.height + 2 * Table.edge
     );
   }
 

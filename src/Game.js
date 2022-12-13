@@ -24,28 +24,28 @@ class Game {
   /**
    *
    * @param {ParticleState} initState initial state of all game balls.
-   * @param {Colors[]} ballcolors array of colors to paint the game balls.
-   *  White ball MUST be the first color.
+   * @param {int[]} ballnumbers array of the balls.
+   *  White ball (1) MUST be first.
    * @param {float} stepsize step size to use when integrating.
    */
-  constructor(initState, ballcolors, stepsize) {
-    if (initState.positions.length != ballcolors.length)
-      throw new Error("Ball color array size must match state vector sizes.");
+  constructor(initState, ballnumbers, stepsize) {
+    if (initState.positions.length != ballnumbers.length)
+      throw new Error("Ball number array size must match state vector sizes.");
 
-    if (!ballcolors.length || ballcolors[0] !== Colors.WHITE)
-      throw new Error("White ball MUST be the first color in `ballColors`.");
+    if (!ballnumbers.length || ballnumbers[0] !== 0)
+      throw new Error("0 MUST be the first number in `ballnumbers`.");
 
     this.initialState = initState.copy();
     this.currentState = initState.copy();
-    this.ballColors = ballcolors;
+    this.ballNumbers = ballnumbers;
     this.stepSize = stepsize;
 
-    // Create a ball for every ball color we get.
-    for (let idx = 0; idx < this.ballColors.length; idx++) {
+    // Create a ball for every ball number we get.
+    for (let idx = 0; idx < this.ballNumbers.length; idx++) {
       const pos = this.initialState.positions[idx];
-      const color = this.ballColors[idx];
+      const num = this.ballNumbers[idx];    
 
-      this.balls.push(new Ball(pos, color));
+      this.balls.push(new Ball(pos, num, BallNumbers[num][0], BallNumbers[num][1]));
     }
     
     // A boolean to keep track if we need a white ball.
@@ -55,7 +55,7 @@ class Game {
     this.addHoles();
 
     // Hardcoded settings.
-    this.poolSystem = new PoolSystem(this.ballColors.length);
+    this.poolSystem = new PoolSystem(this.ballNumbers.length);
     this.cueStick = new CueStick(this.poolSystem, 0);
   }
 
@@ -82,16 +82,16 @@ class Game {
       if (!tableIntersection) continue;
 
       if (tableIntersection === "left") {
-        pos.x = Ball.RADIUS; // Clamp the x position.
+        pos.x = Table.edge + Ball.RADIUS; // Clamp the x position.
         vel.x *= -hitDamp; // Negate x dir for perfect reflection.
       } else if (tableIntersection === "right") {
-        pos.x = Table.width - Ball.RADIUS;
+        pos.x = Table.width + Table.edge - Ball.RADIUS;
         vel.x *= -hitDamp;
       } else if (tableIntersection === "top") {
-        pos.y = Ball.RADIUS; // Clamp the y position.
+        pos.y = Ball.RADIUS + Table.edge; // Clamp the y position.
         vel.y *= -hitDamp; // Negate y dir for perfect reflection.
       } else if (tableIntersection === "bottom") {
-        pos.y = Table.height - Ball.RADIUS;
+        pos.y = Table.height + Table.edge - Ball.RADIUS;
         vel.y *= -hitDamp;
       }
     }
@@ -169,6 +169,7 @@ class Game {
    * @param {float} mY mouseY
    */
   showBallOutline(mX, mY) {
+    stroke(Colors.BLACK);
     drawingContext.setLineDash([5, 5]); // Set line to dotted line.
     noFill();
     ellipse(mX, mY, Ball.RADIUS * 2);
@@ -181,11 +182,10 @@ class Game {
    * @returns {bool} true if the ball can be placed, else false.
   */
   canPlaceBall(mX, mY) {
-    // Handle collisions with holes.
-    if (0 < mX &&
-        mX < Table.width &&
-        0 < mY &&
-        mY < Table.height){
+    if (Table.edge + Ball.RADIUS < mX &&
+        mX + Ball.RADIUS < Table.width + Table.edge &&
+        Table.edge + Ball.RADIUS < mY &&
+        mY + Ball.RADIUS < Table.height + Table.edge){
         for (let i = 0; i < this.balls.length; i++) {
           const centersDist = dist(mX, mY, this.balls[i].position.x, this.balls[i].position.y);
           if (centersDist < 2 * Ball.RADIUS)
@@ -208,10 +208,10 @@ class Game {
    */
   placeWhiteBall(mX, mY) {
     const pos = Vec(mX, mY);
-    const color = this.ballColors[this.whiteBallIdx];
+    const color = Colors.WHITE;
   
     // Place the new white ball back to where the original ball was in the array.
-    this.balls.splice(this.whiteBallIdx, 0, new Ball(pos, color));
+    this.balls.splice(this.whiteBallIdx, 0, new Ball(pos, 0, color));
     this.currentState.positions.splice(this.whiteBallIdx, 0, pos);
     this.currentState.velocities.splice(this.whiteBallIdx, 0, Vec(0, 0));
     this.poolSystem.appliedForces.splice(this.whiteBallIdx, 0, Vec(0, 0));
@@ -220,16 +220,18 @@ class Game {
     this.needWhiteBall = false; // Reset the boolean so the game can unfreeze.
   }
 
+  /**
+   * Add the holes to the pool table.
+   */
   addHoles() {
-    // TODO: Make this dynamic.
     const holeOffset = 5;
-    this.holes.push(new Hole(Vec(0 + holeOffset, 0 + holeOffset))); // Top left
-    this.holes.push(new Hole(Vec(Table.width - holeOffset, 0 + holeOffset))); // Top right
-    this.holes.push(new Hole(Vec(0 - holeOffset, Table.height / 2))); // Middle Left
-    this.holes.push(new Hole(Vec(Table.width, Table.height / 2))); // Middle Right
-    this.holes.push(new Hole(Vec(0 + holeOffset, Table.height - holeOffset))); // Bottom Left
+    this.holes.push(new Hole(Vec(Table.edge + holeOffset, Table.edge + holeOffset))); // Top left
+    this.holes.push(new Hole(Vec(Table.edge + Table.width - holeOffset, Table.edge + holeOffset))); // Top right
+    this.holes.push(new Hole(Vec(Table.edge + holeOffset, Table.edge + Table.height / 2))); // Middle Left
+    this.holes.push(new Hole(Vec(Table.edge + Table.width - holeOffset, Table.edge + Table.height / 2))); // Middle Right
+    this.holes.push(new Hole(Vec(Table.edge + holeOffset, Table.edge + Table.height - holeOffset))); // Bottom Left
     this.holes.push(
-      new Hole(Vec(Table.width - holeOffset, Table.height - holeOffset))
+      new Hole(Vec(Table.edge + Table.width - holeOffset, Table.edge + Table.height - holeOffset))
     ); // Bottom Right
   }
 

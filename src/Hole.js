@@ -4,7 +4,7 @@
  * Represents a hole on the table
  */
 class Hole {
-  static RADIUS = 25;
+  static RADIUS = 20;
 
   position = null;
 

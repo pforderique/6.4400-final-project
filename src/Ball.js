@@ -13,12 +13,13 @@ class Ball {
    *
    * @param {Vector} pos position vector
    * @param {Color} color ball color
+   * @param {BallTypes} ball_type type of ball
    */
-  constructor(pos, color = null, texture = null) {
+  constructor(pos, number, color = null, ball_type = null) {
     this.position = pos;
+    this.number = number;
     this.color = color ? color : Colors.WHITE; // Defaults to white ball.
-    // TODO: take in an optional texture to render instead of a plain color ?
-    //  https://p5js.org/reference/#/p5/texture ?
+    this.ball_type = ball_type ? ball_type : BallTypes.CUE; // Defaults to white ball.
   }
 
   /**
@@ -26,10 +27,10 @@ class Ball {
    *  or false depending on intersection.
    */
   intersectTable() {
-    if (this.position.y - Ball.RADIUS < 0) return "top";
-    if (this.position.y + Ball.RADIUS > Table.height) return "bottom";
-    if (this.position.x - Ball.RADIUS < 0) return "left";
-    if (this.position.x + Ball.RADIUS > Table.width) return "right";
+    if (this.position.y - Ball.RADIUS < 0 + Table.edge) return "top";
+    if (this.position.y + Ball.RADIUS > Table.height + Table.edge) return "bottom";
+    if (this.position.x - Ball.RADIUS < 0 + Table.edge) return "left";
+    if (this.position.x + Ball.RADIUS > Table.width + Table.edge) return "right";
     return false;
   }
 
@@ -52,8 +53,23 @@ class Ball {
    * Show ball at its current position.
    */
   show() {
-    drawingContext.setLineDash([]); // Set line to solid line.
+    noStroke();
     fill(this.color);
     ellipse(this.position.x, this.position.y, Ball.RADIUS * 2);
+    
+    if (this.number == 0)
+      return;
+
+    fill(Colors.WHITE);
+    if (this.ball_type == BallTypes.STRIPE) {
+      arc(this.position.x, this.position.y, Ball.RADIUS * 2, Ball.RADIUS * 2, PI + (PI / 4), PI + (3 * PI / 4), CHORD);
+      arc(this.position.x, this.position.y, Ball.RADIUS * 2, Ball.RADIUS * 2, PI / 4, 3 * PI / 4, CHORD);
+    }
+    ellipse(this.position.x, this.position.y, Ball.RADIUS);
+  
+    fill(Colors.BLACK);
+    textSize(10);
+    textAlign(CENTER, CENTER);
+    text(this.number, this.position.x, this.position.y);
   }
 }
